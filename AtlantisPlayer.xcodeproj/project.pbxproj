@@ -13,6 +13,11 @@
 		5598ABD6255D9CCC00F5C92A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5598ABD4255D9CCC00F5C92A /* Main.storyboard */; };
 		5598ABD8255D9CCD00F5C92A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5598ABD7255D9CCD00F5C92A /* Assets.xcassets */; };
 		5598ABDB255D9CCD00F5C92A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5598ABD9255D9CCD00F5C92A /* LaunchScreen.storyboard */; };
+		5598ABEE255DA17300F5C92A /* AtlantisPlayerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5598ABED255DA17300F5C92A /* AtlantisPlayerDelegate.swift */; };
+		5598ABF1255DA1B900F5C92A /* AtlantisPlayerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5598ABF0255DA1B900F5C92A /* AtlantisPlayerService.swift */; };
+		5598ABF5255DA3EB00F5C92A /* AtalnatisExtentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5598ABF4255DA3EB00F5C92A /* AtalnatisExtentions.swift */; };
+		5598AC29255DA62100F5C92A /* AtlantisPlayerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5598AC28255DA62100F5C92A /* AtlantisPlayerModel.swift */; };
+		5598AC2C255DACEB00F5C92A /* CashPlayerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5598AC2B255DACEB00F5C92A /* CashPlayerService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +29,11 @@
 		5598ABD7255D9CCD00F5C92A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5598ABDA255D9CCD00F5C92A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5598ABDC255D9CCD00F5C92A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5598ABED255DA17300F5C92A /* AtlantisPlayerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtlantisPlayerDelegate.swift; sourceTree = "<group>"; };
+		5598ABF0255DA1B900F5C92A /* AtlantisPlayerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtlantisPlayerService.swift; sourceTree = "<group>"; };
+		5598ABF4255DA3EB00F5C92A /* AtalnatisExtentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtalnatisExtentions.swift; sourceTree = "<group>"; };
+		5598AC28255DA62100F5C92A /* AtlantisPlayerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtlantisPlayerModel.swift; sourceTree = "<group>"; };
+		5598AC2B255DACEB00F5C92A /* CashPlayerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashPlayerService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +66,8 @@
 		5598ABCD255D9CCC00F5C92A /* AtlantisPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				5598ABF3255DA3D400F5C92A /* extentions */,
+				5598ABEC255DA12B00F5C92A /* playerService */,
 				5598ABCE255D9CCC00F5C92A /* AppDelegate.swift */,
 				5598ABD0255D9CCC00F5C92A /* SceneDelegate.swift */,
 				5598ABD2255D9CCC00F5C92A /* ViewController.swift */,
@@ -65,6 +77,25 @@
 				5598ABDC255D9CCD00F5C92A /* Info.plist */,
 			);
 			path = AtlantisPlayer;
+			sourceTree = "<group>";
+		};
+		5598ABEC255DA12B00F5C92A /* playerService */ = {
+			isa = PBXGroup;
+			children = (
+				5598ABED255DA17300F5C92A /* AtlantisPlayerDelegate.swift */,
+				5598ABF0255DA1B900F5C92A /* AtlantisPlayerService.swift */,
+				5598AC28255DA62100F5C92A /* AtlantisPlayerModel.swift */,
+				5598AC2B255DACEB00F5C92A /* CashPlayerService.swift */,
+			);
+			path = playerService;
+			sourceTree = "<group>";
+		};
+		5598ABF3255DA3D400F5C92A /* extentions */ = {
+			isa = PBXGroup;
+			children = (
+				5598ABF4255DA3EB00F5C92A /* AtalnatisExtentions.swift */,
+			);
+			path = extentions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,7 +170,12 @@
 			files = (
 				5598ABD3255D9CCC00F5C92A /* ViewController.swift in Sources */,
 				5598ABCF255D9CCC00F5C92A /* AppDelegate.swift in Sources */,
+				5598AC29255DA62100F5C92A /* AtlantisPlayerModel.swift in Sources */,
 				5598ABD1255D9CCC00F5C92A /* SceneDelegate.swift in Sources */,
+				5598ABEE255DA17300F5C92A /* AtlantisPlayerDelegate.swift in Sources */,
+				5598ABF5255DA3EB00F5C92A /* AtalnatisExtentions.swift in Sources */,
+				5598ABF1255DA1B900F5C92A /* AtlantisPlayerService.swift in Sources */,
+				5598AC2C255DACEB00F5C92A /* CashPlayerService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,7 +323,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = E865EW68PL;
+				DEVELOPMENT_TEAM = WXAA7QNTQ3;
 				INFOPLIST_FILE = AtlantisPlayer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -306,7 +342,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = E865EW68PL;
+				DEVELOPMENT_TEAM = WXAA7QNTQ3;
 				INFOPLIST_FILE = AtlantisPlayer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
