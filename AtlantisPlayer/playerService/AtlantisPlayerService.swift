@@ -151,11 +151,11 @@ class AtlantisPlayerService:NSObject {
                     //self.playerPlay(url: url )
                     if state {
                         guard let url = urls else {return}
-                        print("service avilable")
-                        print("service checkCach",url)
+                        log(type:.defult,"avilable")
+                        log(type:.defult,"Check",url)
                         self.playerPlay(url: url)
                     } else {
-                        print("service not avilable")
+                        log(type:.error,"not avilable")
                         self.playerPlay(url: url)
                         do {
                             try url.cach(to: .documentDirectory,using: id.description, completion: { (urls, err, text) in
@@ -173,7 +173,7 @@ class AtlantisPlayerService:NSObject {
                                         
                                     }
                                 } else {
-                                    print("service finish download")
+                                    log(type:.defult,"finish download")
                                 }
                             })
                         } catch {

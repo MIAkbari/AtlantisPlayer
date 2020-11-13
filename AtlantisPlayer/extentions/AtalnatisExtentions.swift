@@ -121,6 +121,23 @@ extension URL {
     }
 }
 
+public enum PrintType {
+    case error
+    case defult
+}
+
+public func log(type:PrintType,_ items: Any..., separator: String = " ", terminator: String = "\n") {
+    
+    items.forEach { item in
+        switch type {
+        case .error:
+            print("❌ Debugs: ",item,separator,terminator)
+        case .defult:
+            print("❎ Service: ",item,separator,terminator)
+        }
+    }
+}
+
 extension AVPlayer {
     
     var isPlaying: Bool {
