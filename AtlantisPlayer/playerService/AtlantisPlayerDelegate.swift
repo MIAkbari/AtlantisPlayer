@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import AVFoundation
 
- protocol AtlantisPlayerDelegate {
+protocol AtlantisPlayerDelegate {
     
     func atlantisPlayerNext(isFinish:Bool)
     func atlantisPlayerPrev(isStart:Bool)

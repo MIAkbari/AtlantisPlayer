@@ -7,6 +7,7 @@
 
 import UIKit
 import AVKit
+import LNPopupController
 
 class ViewController: UIViewController {
     
@@ -37,32 +38,59 @@ class ViewController: UIViewController {
     @IBOutlet weak var activity:UIActivityIndicatorView!
 
     var isShuffleState = false
-    
-    var playerService = AtlantisPlayerService()
+    var isLoading = true
+    var playerService:AtlantisPlayerService!
 
-    let items:[AtlantisPlayerModel] = [
-        .init(isVideo:true,album: "AAAA", artist: "AAAAA", imageCover:
-                "1", songUrl: "https://baarzesh.net/wp-content/uploads/2018/12/%D9%84%DB%8C%D8%B1%DB%8C%DA%A9%D8%B3-%D9%88%DB%8C%D8%AF%D8%A6%D9%88%DB%8C-%D8%A7%D9%87%D9%86%DA%AF-in-my-feelings-%D8%A7%D8%B2-drake.mp4?_=2", songName: "Speaicl", id: 10),
-            
-            .init(isVideo:false,album: "BBBB", artist: "BBBB", imageCover:
-                    "2", songUrl: "https://baarzesh.net/wp-content/uploads/2018/10/Perfect-ED-SHEERAN.mp3", songName: "Speaicl", id: 11),
-            .init(isVideo:false,album: "CCCC", artist: "CCCC", imageCover:
-                    "3", songUrl: "https://baarzesh.net/wp-content/uploads/2018/12/Girls-Like-You-MAROON-5-ft-CARDI-B.mp3", songName: "Speaicl", id: 12),
-            
-            .init(isVideo:false,album: "DDDDD", artist: "DDDDD", imageCover:
-                    "1", songUrl: "https://baarzesh.net/wp-content/uploads/2019/08/gods-plan.mp3", songName: "Speaicl", id: 13)
-    ]
+    
+    var song_id:Int? = nil
+    var song_url:URL? = nil
+    
+    
+    var firstVc:MainVC!
+    let barButton = UIBarButtonItem(image: #imageLiteral(resourceName: "play-button-arrowhead").withRenderingMode(.alwaysTemplate).withTintColor(.white), style: .plain, target: self, action: #selector(selectedMov))
+    
+  
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        barButton.target = self
+        self.popupItem.barButtonItems = [barButton]
         
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("A")
+    }
+ 
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("B")
+    }
+    
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        print("D")
+    }
+    
+    
+    
+    func start(player:AtlantisPlayerService?,items:[AtlantisPlayerModel]) {
+        playerService = player
         playerService.items = items
         playerService.delegate = self
         playerService.dataManage = self
         playerService.videoDelegate = self
         playerService.isFreeUser = true
+        playerService.isFromSync = true
         playerService.playerRun()
     }
+    
+ 
     
     func addVideoPlayer(layer: AVPlayerLayer? = nil,image:UIImage?) {
        
@@ -81,6 +109,10 @@ class ViewController: UIViewController {
     }
 
 
+    @objc
+    func selectedMov() {
+        self.playerService.play()
+    }
     
     @IBAction func nextSong(_ sender:UIButton) {
         self.playerService.next()
@@ -91,6 +123,42 @@ class ViewController: UIViewController {
     }
     
     @IBAction func donalodSong(_ sender:UIButton) {
+        do {
+            guard let url = self.song_url else {
+                return
+            }
+            
+            guard let id = self.song_id else {
+                return
+            }
+            DispatchQueue.main.async {
+                self.activity.startAnimating()
+            }
+            try url.cach(to: .documentDirectory,using: "D\(id)", completion: { (urls, err, text) in
+                if err != nil {
+                    log(type:.error,err?.localizedDescription ?? "")
+//                    if urls?.checkFileExist() ?? true {
+//
+//                        let filemanager = FileManager.default
+//                        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,.userDomainMask,true)[0] as NSString
+//                        let destinationPath = documentsPath.appendingPathComponent("\(id).mp3")
+//                        do {
+//                            try filemanager.removeItem(atPath: destinationPath)
+//                        } catch let err {
+//                            print(err.localizedDescription)
+//                        }
+//
+//                    }
+                } else {
+                    log(type:.defult,"finish download")
+                }
+                DispatchQueue.main.async {
+                    self.activity.stopAnimating()
+                }
+            })
+        } catch {
+            print("err",error.localizedDescription)
+        }
     }
     
     @IBAction func shuffleSong(_ sender:UIButton) {
@@ -134,17 +202,12 @@ extension ViewController:AtlantisPlayerDelegate ,AtlantisPlayerDataManage ,Atlan
     }
     
 
-    
-  
-    
-    
     func atlantisPlayerStatus(isStart: Bool) {
         DispatchQueue.main.async {
             self.btnPlay.setImage(isStart ? UIImage(named: "pause-button"):UIImage(named: "play-button-arrowhead"), for: .normal)
+            self.barButton.image = isStart ? #imageLiteral(resourceName: "pause-button").withRenderingMode(.alwaysTemplate).withTintColor(.white) : #imageLiteral(resourceName: "play-button-arrowhead").withRenderingMode(.alwaysTemplate).withTintColor(.white)
         }
     }
-    
-    
     
     
     func atlantisPlayerFinish(state: Bool) {
@@ -170,8 +233,7 @@ extension ViewController:AtlantisPlayerDelegate ,AtlantisPlayerDataManage ,Atlan
         
     }
     
-    
-    
+
     func atlantisPlayerNext(isFinish: Bool) {
         self.btnNext.isEnabled = isFinish
     }
@@ -195,15 +257,11 @@ extension ViewController:AtlantisPlayerDelegate ,AtlantisPlayerDataManage ,Atlan
     }
     
     
-   
-    
     func atlantisPlayerSeek(value: Float) {
         self.slider.value = value
+        self.popupItem.progress = value
     }
     
-    
-    
- 
     
     func atlantisPlayerDurations(minutes: String, seconds: String) {
         self.labelDurations.text = "\(minutes):\(seconds)"
@@ -218,7 +276,13 @@ extension ViewController:AtlantisPlayerDelegate ,AtlantisPlayerDataManage ,Atlan
     }
     
     func atlantisPlayerItems(item: AtlantisPlayerModel) {
+        self.song_id = item.id
+        self.song_url = URL(string: item.songUrl ?? "")
         self.imageCover.image = UIImage(named: item.imageCover ?? "")
+        popupItem.title = item.songName
+        popupItem.subtitle = item.album
+        popupItem.image = UIImage(named: item.imageCover ?? "")
+
     }
     
     func atlantisPlayerError(error: AtlantisPlayerError) {

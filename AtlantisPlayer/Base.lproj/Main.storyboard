@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="RGV-gw-xZk">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
@@ -11,7 +11,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="AtlantisPlayer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="BYZ-38-t0r" customClass="ViewController" customModule="AtlantisPlayer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -103,8 +103,12 @@
                                     <action selector="shuffleSong:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Owd-A6-F3b"/>
                                 </connections>
                             </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h7X-z0-0Tp">
-                                <rect key="frame" x="178" y="687" width="69" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h7X-z0-0Tp">
+                                <rect key="frame" x="178" y="687" width="100" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="PmV-mL-Syv"/>
+                                    <constraint firstAttribute="height" constant="50" id="tkd-k1-Mlc"/>
+                                </constraints>
                                 <state key="normal" title="Download"/>
                                 <connections>
                                     <action selector="donalodSong:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ad5-ca-EaH"/>
@@ -131,6 +135,7 @@
                             <constraint firstItem="urd-8q-mSn" firstAttribute="top" secondItem="Mae-F4-bpR" secondAttribute="bottom" constant="22" id="AOP-Ob-jBi"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="RvR-hU-hLW" secondAttribute="trailing" constant="44" id="APz-HK-l5u"/>
                             <constraint firstItem="Mae-F4-bpR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="32" id="C1T-cp-yXw"/>
+                            <constraint firstItem="h7X-z0-0Tp" firstAttribute="top" secondItem="mHr-yT-2zn" secondAttribute="bottom" constant="21.5" id="EHE-ez-dFw"/>
                             <constraint firstItem="8lx-Vz-DaK" firstAttribute="top" secondItem="qXg-UE-p6X" secondAttribute="bottom" constant="27" id="Ecg-XY-AWn"/>
                             <constraint firstItem="OX8-7h-aaE" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="367" id="Ftz-KR-ltC"/>
                             <constraint firstItem="mHr-yT-2zn" firstAttribute="top" secondItem="L2d-lW-3u3" secondAttribute="bottom" constant="103.5" id="H4j-nJ-oqw"/>
@@ -144,14 +149,13 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Mae-F4-bpR" secondAttribute="trailing" constant="42" id="RVE-6S-OzG"/>
                             <constraint firstItem="2a6-Up-2Bt" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="367" id="Rp7-VA-PRB"/>
                             <constraint firstItem="L2d-lW-3u3" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" constant="2" id="aP7-12-M2n"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="h7X-z0-0Tp" secondAttribute="trailing" constant="171" id="bUI-kg-FJG"/>
                             <constraint firstItem="qXg-UE-p6X" firstAttribute="top" secondItem="OX8-7h-aaE" secondAttribute="bottom" constant="48" id="bd1-Vi-vC0"/>
                             <constraint firstItem="af5-hH-iUI" firstAttribute="top" secondItem="Mae-F4-bpR" secondAttribute="bottom" constant="61" id="clD-A3-XKI"/>
+                            <constraint firstItem="h7X-z0-0Tp" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="178" id="egE-CS-9T1"/>
                             <constraint firstItem="RvR-hU-hLW" firstAttribute="top" secondItem="af5-hH-iUI" secondAttribute="bottom" constant="48" id="fxB-ei-5lb"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="2a6-Up-2Bt" secondAttribute="trailing" constant="20" id="lFb-hW-ofX"/>
                             <constraint firstItem="Mae-F4-bpR" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="24" id="n27-zw-k2t"/>
                             <constraint firstItem="L2d-lW-3u3" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="66" id="nkI-YL-Pxj"/>
-                            <constraint firstItem="h7X-z0-0Tp" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="178" id="ooi-yX-dgE"/>
                             <constraint firstItem="af5-hH-iUI" firstAttribute="leading" secondItem="OX8-7h-aaE" secondAttribute="trailing" constant="19" id="wIX-T1-K2m"/>
                             <constraint firstItem="qXg-UE-p6X" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="46" id="wK7-xn-jf6"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="urd-8q-mSn" secondAttribute="trailing" constant="198" id="ym4-k9-oo3"/>
@@ -175,6 +179,42 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="140.57971014492756" y="71.651785714285708"/>
+        </scene>
+        <!--MainVC-->
+        <scene sceneID="hAl-dX-N5n">
+            <objects>
+                <viewController id="RGV-gw-xZk" customClass="MainVC" customModule="AtlantisPlayer" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1OC-6u-e6W">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZNj-kM-7aD">
+                                <rect key="frame" x="157" y="423" width="100" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="Q68-wx-ycj"/>
+                                    <constraint firstAttribute="height" constant="50" id="ljT-0V-IcT"/>
+                                </constraints>
+                                <state key="normal" title="Play Songs"/>
+                                <connections>
+                                    <action selector="openPlayer:" destination="RGV-gw-xZk" eventType="touchUpInside" id="iDI-s6-kj6"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="hrO-OU-zfa"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="ZNj-kM-7aD" firstAttribute="centerX" secondItem="1OC-6u-e6W" secondAttribute="centerX" id="Sn6-G4-y4X"/>
+                            <constraint firstItem="ZNj-kM-7aD" firstAttribute="centerY" secondItem="1OC-6u-e6W" secondAttribute="centerY" id="bGU-Ll-MRD"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="egp-es-3Ml"/>
+                    <connections>
+                        <outlet property="button" destination="ZNj-kM-7aD" id="3HV-g0-1xU"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9v1-NK-HjX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="857.97101449275374" y="-601.33928571428567"/>
         </scene>
     </scenes>
     <resources>

@@ -91,11 +91,13 @@ extension URL {
             return
         }
         
-        URLSession.shared.downloadTask(with: self) { location, _, error in
+        URLSession.shared.downloadTask(with: self) { location,_, error in
             guard let location = location else {
                 completion(nil, error,"e")
                 return
             }
+            
+            
             do {
                 if overwrite, FileManager.default.fileExists(atPath: destination.path) {
                     try FileManager.default.removeItem(at: destination)
@@ -111,11 +113,10 @@ extension URL {
     func checkFileExist() -> Bool {
         let path = self.path
         if (FileManager.default.fileExists(atPath: path))   {
-            print("service FILE AVAILABLE")
-            
+            log(type: .defult, "AVAILABLE")
             return true
-        }else        {
-            print("service FILE NOT AVAILABLE")
+        }else {
+            log(type: .error, "NOT AVAILABLE")
             return false
         }
     }
@@ -131,9 +132,9 @@ public func log(type:PrintType,_ items: Any..., separator: String = " ", termina
     items.forEach { item in
         switch type {
         case .error:
-            print("❌ Debugs: ",item,separator,terminator)
+            print("❌ Service Debug: ",item,separator,terminator)
         case .defult:
-            print("❎ Service: ",item,separator,terminator)
+            print("❎ Service Log: ",item,separator,terminator)
         }
     }
 }

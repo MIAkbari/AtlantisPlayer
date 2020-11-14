@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -18,7 +18,24 @@
 		5598ABF5255DA3EB00F5C92A /* AtalnatisExtentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5598ABF4255DA3EB00F5C92A /* AtalnatisExtentions.swift */; };
 		5598AC29255DA62100F5C92A /* AtlantisPlayerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5598AC28255DA62100F5C92A /* AtlantisPlayerModel.swift */; };
 		5598AC2C255DACEB00F5C92A /* CashPlayerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5598AC2B255DACEB00F5C92A /* CashPlayerService.swift */; };
+		5598ACA2256002E800F5C92A /* LNPopupController in Frameworks */ = {isa = PBXBuildFile; productRef = 5598ACA1256002E800F5C92A /* LNPopupController */; };
+		5598ACA3256002E800F5C92A /* LNPopupController in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 5598ACA1256002E800F5C92A /* LNPopupController */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		5598ACA6256003E500F5C92A /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5598ACA5256003E500F5C92A /* MainVC.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5598ACA4256002E800F5C92A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5598ACA3256002E800F5C92A /* LNPopupController in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		5598ABCB255D9CCC00F5C92A /* AtlantisPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AtlantisPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -34,6 +51,7 @@
 		5598ABF4255DA3EB00F5C92A /* AtalnatisExtentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtalnatisExtentions.swift; sourceTree = "<group>"; };
 		5598AC28255DA62100F5C92A /* AtlantisPlayerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtlantisPlayerModel.swift; sourceTree = "<group>"; };
 		5598AC2B255DACEB00F5C92A /* CashPlayerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashPlayerService.swift; sourceTree = "<group>"; };
+		5598ACA5256003E500F5C92A /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5598ACA2256002E800F5C92A /* LNPopupController in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +94,7 @@
 				5598ABD7255D9CCD00F5C92A /* Assets.xcassets */,
 				5598ABD9255D9CCD00F5C92A /* LaunchScreen.storyboard */,
 				5598ABDC255D9CCD00F5C92A /* Info.plist */,
+				5598ACA5256003E500F5C92A /* MainVC.swift */,
 			);
 			path = AtlantisPlayer;
 			sourceTree = "<group>";
@@ -108,12 +128,16 @@
 				5598ABC7255D9CCC00F5C92A /* Sources */,
 				5598ABC8255D9CCC00F5C92A /* Frameworks */,
 				5598ABC9255D9CCC00F5C92A /* Resources */,
+				5598ACA4256002E800F5C92A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = AtlantisPlayer;
+			packageProductDependencies = (
+				5598ACA1256002E800F5C92A /* LNPopupController */,
+			);
 			productName = AtlantisPlayer;
 			productReference = 5598ABCB255D9CCC00F5C92A /* AtlantisPlayer.app */;
 			productType = "com.apple.product-type.application";
@@ -141,6 +165,9 @@
 				Base,
 			);
 			mainGroup = 5598ABC2255D9CCC00F5C92A;
+			packageReferences = (
+				5598ACA0256002E800F5C92A /* XCRemoteSwiftPackageReference "LNPopupController" */,
+			);
 			productRefGroup = 5598ABCC255D9CCC00F5C92A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -172,6 +199,7 @@
 				5598ABCF255D9CCC00F5C92A /* AppDelegate.swift in Sources */,
 				5598AC29255DA62100F5C92A /* AtlantisPlayerModel.swift in Sources */,
 				5598ABD1255D9CCC00F5C92A /* SceneDelegate.swift in Sources */,
+				5598ACA6256003E500F5C92A /* MainVC.swift in Sources */,
 				5598ABEE255DA17300F5C92A /* AtlantisPlayerDelegate.swift in Sources */,
 				5598ABF5255DA3EB00F5C92A /* AtalnatisExtentions.swift in Sources */,
 				5598ABF1255DA1B900F5C92A /* AtlantisPlayerService.swift in Sources */,
@@ -377,6 +405,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5598ACA0256002E800F5C92A /* XCRemoteSwiftPackageReference "LNPopupController" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/LeoNatan/LNPopupController.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.10.24;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5598ACA1256002E800F5C92A /* LNPopupController */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5598ACA0256002E800F5C92A /* XCRemoteSwiftPackageReference "LNPopupController" */;
+			productName = LNPopupController;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5598ABC3255D9CCC00F5C92A /* Project object */;
 }

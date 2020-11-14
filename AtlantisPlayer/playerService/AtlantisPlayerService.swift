@@ -8,10 +8,12 @@
 import AVFoundation
 import AVKit
 import MediaPlayer
+import Foundation
 
 
 class AtlantisPlayerService:NSObject {
     
+    static let shareInstance = AtlantisPlayerService()
     var currentAudioIndex = 0
     var isPlaying = false
     var player:AVPlayer? = nil
@@ -26,6 +28,7 @@ class AtlantisPlayerService:NSObject {
     var urlString:String? = nil
     var id:Int? = nil
     var isVdeo = false
+    var isFromSync = false
     var view:UIView = .init()
     var nowPlayingInfo = [String : Any]()
     var commandPlay: Any?
@@ -117,7 +120,7 @@ class AtlantisPlayerService:NSObject {
         self.nowPlayingInfo[MPMediaItemPropertyArtwork] =
             MPMediaItemArtwork(boundsSize: image.size) { size in
                 return image
-        }
+            }
         self.dataManage?.atlantisPlayerItems(item: itemShuffle[currentAudioIndex])
     }
     
@@ -132,7 +135,7 @@ class AtlantisPlayerService:NSObject {
         self.nowPlayingInfo[MPMediaItemPropertyArtwork] =
             MPMediaItemArtwork(boundsSize: image.size) { size in
                 return image
-        }
+            }
         self.dataManage?.atlantisPlayerItems(item: itemDefult[currentAudioIndex])
     }
     
@@ -147,42 +150,58 @@ class AtlantisPlayerService:NSObject {
             if !self.delegate.atlantisPlayerFree() {
                 let item = self.items[currentAudioIndex]
                 
-                self.checkCach(url: url, id: item.id ?? 0, isVideo: item.isVideo ?? false) { urls, state in
-                    //self.playerPlay(url: url )
-                    if state {
-                        guard let url = urls else {return}
-                        log(type:.defult,"avilable")
-                        log(type:.defult,"Check",url)
-                        self.playerPlay(url: url)
-                    } else {
-                        log(type:.error,"not avilable")
-                        self.playerPlay(url: url)
-                        do {
-                            try url.cach(to: .documentDirectory,using: id.description, completion: { (urls, err, text) in
-                                if err != nil {
-                                    if urls?.checkFileExist() ?? true {
-                                        
-                                        let filemanager = FileManager.default
-                                        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,.userDomainMask,true)[0] as NSString
-                                        let destinationPath = documentsPath.appendingPathComponent("\(id).mp3")
-                                        do {
-                                            try filemanager.removeItem(atPath: destinationPath)
-                                        } catch let err {
-                                            print(err.localizedDescription)
-                                        }
-                                        
-                                    }
-                                } else {
-                                    log(type:.defult,"finish download")
-                                }
-                            })
-                        } catch {
-                            print("err",error.localizedDescription)
+                if self.isFromSync {
+                    self.checkdownload(url: url, id: item.id ?? 0, isVideo: item.isVideo ?? false) { urls, state in
+                        if state {
+                            guard let url = urls else {return}
+                            log(type:.defult,"download avilable")
+                            log(type:.defult,"download",url)
+                            self.playerPlay(url: url)
+                        } else {
+                            log(type:.error,"download not avilable")
+                            self.playerPlay(url: url)
                         }
                     }
+                } else {
+                    self.checkCach(url: url, id: item.id ?? 0, isVideo: item.isVideo ?? false) { urls, state in
+                        //self.playerPlay(url: url )
+                        if state {
+                            guard let url = urls else {return}
+                            log(type:.defult,"avilable")
+                            log(type:.defult,"Check",url)
+                            self.playerPlay(url: url)
+                        } else {
+                            log(type:.error,"not avilable")
+                            self.playerPlay(url: url)
+                            do {
+                                try url.cach(to: .documentDirectory,using: id.description, completion: { (urls, err, text) in
+                                    if err != nil {
+                                        if urls?.checkFileExist() ?? true {
+                                            
+                                            let filemanager = FileManager.default
+                                            let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,.userDomainMask,true)[0] as NSString
+                                            let destinationPath = documentsPath.appendingPathComponent("\(id).mp3")
+                                            do {
+                                                try filemanager.removeItem(atPath: destinationPath)
+                                            } catch let err {
+                                                print(err.localizedDescription)
+                                            }
+                                            
+                                        }
+                                    } else {
+                                        log(type:.defult,"finish cache")
+                                    }
+                                })
+                            } catch {
+                                print("err",error.localizedDescription)
+                            }
+                        }
+                    }
+                    
                 }
                 
-               
+                
+                
             } else {
                 self.playerPlay(url: url)
             }
@@ -216,7 +235,7 @@ class AtlantisPlayerService:NSObject {
                                     return
                                 }
                                 self.videoDelegate?.atlantisPlayerVideo(isVideo:true,customLayer,previewImage:image)
-
+                                
                             }
                             
                         } else {
@@ -249,7 +268,7 @@ class AtlantisPlayerService:NSObject {
                     self.player?.addObserver(self, forKeyPath: "currentItem.loadedTimeRanges", options: [.old, .new], context: nil)
                     self.player?.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.old,.new], context: nil)
                     self.player?.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.status), options:[.old,.new], context: nil)
-
+                    
                     self.timeObserver = self.player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC)), queue: DispatchQueue.main) { [unowned self] time in
                         guard self == self else {
                             return
@@ -322,38 +341,30 @@ class AtlantisPlayerService:NSObject {
         self.layer?.frame = view.bounds
         self.layer?.videoGravity = .resizeAspectFill
         view.layer.sublayers?
-                .filter { $0 is AVPlayerLayer }
-                .forEach { $0.removeFromSuperlayer() }
+            .filter { $0 is AVPlayerLayer }
+            .forEach { $0.removeFromSuperlayer() }
         view.layer.addSublayer(layer ?? AVPlayerLayer())
     }
     
+    
+    
+    
     func remoteOff() {
         
-        if self.timeObserver != nil {
-            self.player?.removeObserver(self, forKeyPath: "currentItem.loadedTimeRanges")
-            self.player?.removeTimeObserver(self.timeObserver as Any)
-            self.player?.removeObserver(self, forKeyPath:  #keyPath(AVPlayer.status))
-            self.player?.removeObserver(self, forKeyPath:  #keyPath(AVPlayer.currentItem.status))
-            NotificationCenter.default.removeObserver(self)
-            self.player = nil
-            self.timeObserver = nil
-        }
-        
-        if delegate != nil {
-            if delegate.atlantisPlayerFree() {
-                self.isShuffled = false
-            } else {
-                self.isShuffled = true
-            }
-        }
-        
-        self.timeObserver = nil
+        self.player?.removeObserver(self, forKeyPath: "currentItem.loadedTimeRanges")
+        self.player?.removeTimeObserver(self.timeObserver as Any)
+        self.player?.removeObserver(self, forKeyPath:  #keyPath(AVPlayer.status))
+        self.player?.removeObserver(self, forKeyPath:  #keyPath(AVPlayer.currentItem.status))
+        NotificationCenter.default.removeObserver(self)
+        self.isShuffled = false
+        self.player = nil
         self.playerItem = nil
         self.timeObserver = nil
         self.avAsset = nil
         self.layer = nil
         self.currentAudioIndex = 0
         self.isAll = true
+        self.items.removeAll()
     }
     
     
@@ -385,7 +396,7 @@ class AtlantisPlayerService:NSObject {
             self.playerStartObserver()
         }
         
-       
+        
     }
     
     func playerStartObserver() {
@@ -423,7 +434,7 @@ class AtlantisPlayerService:NSObject {
             self.playerStartObserver()
         }
         
-       
+        
     }
     
     
@@ -448,19 +459,19 @@ class AtlantisPlayerService:NSObject {
         
         do {
             try url?.hasInStorage(to: .documentDirectory,using: isVideo ? "\(id)":"\(id)", completion: { urls, error in
-//                if urls?.checkFileExist() ?? true {
-//                    complation(urls,true)
-//                } else {
-//                    let filemanager = FileManager.default
-//                    let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,.userDomainMask,true)[0] as NSString
-//                    let destinationPath = documentsPath.appendingPathComponent("\(id).mp3")
-//                    do {
-//                        try filemanager.removeItem(atPath: destinationPath)
-//                    } catch let err {
-//                        print(err.localizedDescription)
-//                    }
-//                    complation(url,false)
-//                }
+                //                if urls?.checkFileExist() ?? true {
+                //                    complation(urls,true)
+                //                } else {
+                //                    let filemanager = FileManager.default
+                //                    let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,.userDomainMask,true)[0] as NSString
+                //                    let destinationPath = documentsPath.appendingPathComponent("\(id).mp3")
+                //                    do {
+                //                        try filemanager.removeItem(atPath: destinationPath)
+                //                    } catch let err {
+                //                        print(err.localizedDescription)
+                //                    }
+                //                    complation(url,false)
+                //                }
                 if error != nil {
                     complation(urls,false)
                 } else {
@@ -472,7 +483,98 @@ class AtlantisPlayerService:NSObject {
             print(erorr.localizedDescription)
         }
     }
+    
+    func checkdownload(url:URL?,id:Int,isVideo:Bool,complation:@escaping(URL?,Bool)->Void) {
+        
+        do {
+            try url?.hasInStorage(to: .documentDirectory,using: isVideo ? "D\(id)":"D\(id)", completion: { urls, error in
+                //                if urls?.checkFileExist() ?? true {
+                //                    complation(urls,true)
+                //                } else {
+                //                    let filemanager = FileManager.default
+                //                    let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,.userDomainMask,true)[0] as NSString
+                //                    let destinationPath = documentsPath.appendingPathComponent("\(id).mp3")
+                //                    do {
+                //                        try filemanager.removeItem(atPath: destinationPath)
+                //                    } catch let err {
+                //                        print(err.localizedDescription)
+                //                    }
+                //                    complation(url,false)
+                //                }
+                if error != nil {
+                    complation(urls,false)
+                } else {
+                    complation(urls,true)
+                }
+            })
+            
+        } catch let erorr {
+            print(erorr.localizedDescription)
+        }
+    }
+    
 }
+
+//extension AtlantisPlayerService: URLSessionDelegate, URLSessionDataDelegate, URLSessionDownloadDelegate {
+//
+//    func cachRun(url:URL,to directory: FileManager.SearchPathDirectory, using fileName: String? = nil, overwrite: Bool = false, completion: @escaping (URL?, Error?,String) -> Void) throws {
+//        let directory = try FileManager.default.url(for: directory, in: .userDomainMask, appropriateFor: nil, create: true)
+//        let destination: URL
+////
+////        if let fileName = fileName {
+////            destination = directory
+////                .appendingPathComponent(fileName)
+////                .appendingPathExtension(url.pathExtension)
+////        } else {
+////            destination = directory
+////                .appendingPathComponent(url.lastPathComponent)
+////        }
+////
+////        if !overwrite, FileManager.default.fileExists(atPath: destination.path) {
+////            completion(destination, nil,"u")
+////            return
+////        }
+//        let defaultSession = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+//        defaultSession.downloadTask(with: url) { location,_, error in
+//            guard let location = location else {
+//                completion(nil, error,"e")
+//                return
+//            }
+//
+//
+////            do {
+////                if overwrite, FileManager.default.fileExists(atPath: destination.path) {
+////                    try FileManager.default.removeItem(at: destination)
+////                }
+////                try FileManager.default.moveItem(at: location, to: destination)
+////                completion(destination, nil,"n")
+////            } catch {
+////                print(error)
+////            }
+//        }.resume()
+//
+//        defaultSessio.progress.observe(\<#Root#>.fractionCompleted) { progress, _ in
+//              print("progress: ", progress.fractionCompleted)
+//            }
+//    }
+//
+//    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+//
+//        DispatchQueue.main.async {
+//            log(type:.defult,Float(totalBytesWritten)/Float(totalBytesExpectedToWrite))
+//        }
+//    }
+//
+//    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+//            DispatchQueue.main.async {
+//
+//    //DOWNLOAD SUCCESSFUL AND FILE PATH WILL BE IN URL.
+//
+//    }
+//    }
+//
+//
+//}
 
 
 extension AtlantisPlayerService {
@@ -497,37 +599,37 @@ extension AtlantisPlayerService {
         }
         
         if self.isFreeUser {
-                commandPosition =  commandCenter.changePlaybackPositionCommand.addTarget { [unowned self](remoteEvent) -> MPRemoteCommandHandlerStatus in
-                    if let player = self.player {
-                        let playerRate = player.rate
-                        if let event = remoteEvent as? MPChangePlaybackPositionCommandEvent {
-                            player.seek(to: CMTime(seconds: event.positionTime, preferredTimescale: CMTimeScale(1000)), completionHandler: { [unowned self](success) in
-                                if success {
-                                    self.player?.rate = playerRate
-                                }
-                            })
-                            return .success
-                        }
+            commandPosition =  commandCenter.changePlaybackPositionCommand.addTarget { [unowned self](remoteEvent) -> MPRemoteCommandHandlerStatus in
+                if let player = self.player {
+                    let playerRate = player.rate
+                    if let event = remoteEvent as? MPChangePlaybackPositionCommandEvent {
+                        player.seek(to: CMTime(seconds: event.positionTime, preferredTimescale: CMTimeScale(1000)), completionHandler: { [unowned self](success) in
+                            if success {
+                                self.player?.rate = playerRate
+                            }
+                        })
+                        return .success
                     }
-                    return .commandFailed
                 }
+                return .commandFailed
+            }
         }
     }
     
     
     static func setupAVAudioSession() {
-          do {
-              try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
-              try AVAudioSession.sharedInstance().setActive(true)
-              try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options:
-              .init(rawValue: 0))
-              debugPrint("AVAudioSession is Active and Category Playback is set")
-              UIApplication.shared.beginReceivingRemoteControlEvents()
-          } catch {
-              debugPrint("Error: \(error)")
-          }
-      }
-
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+            try AVAudioSession.sharedInstance().setActive(true)
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options:
+                                                                .init(rawValue: 0))
+            debugPrint("AVAudioSession is Active and Category Playback is set")
+            UIApplication.shared.beginReceivingRemoteControlEvents()
+        } catch {
+            debugPrint("Error: \(error)")
+        }
+    }
+    
     
     
 }
